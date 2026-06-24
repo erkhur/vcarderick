@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Card, Switch, Avatar, Typography, Button,
   Tag, Divider, Tooltip, Space,
@@ -9,8 +9,10 @@ import {
   BulbFilled,
   UserAddOutlined,
   ShareAltOutlined,
+  EyeOutlined,
 } from '@ant-design/icons'
 import QRModal from './QRModal'
+import { useVisitas } from '../hooks/useVisitas'
 
 const { Title, Text, Paragraph } = Typography
 
@@ -58,15 +60,15 @@ async function compartirTarjeta() {
   }
 }
 
-// ── Estilos de animación escalonada ──
 const sectionStyle = (delay) => ({
   opacity: 0,
-  animation: `fadeUp 0.5s ease forwards`,
+  animation: 'fadeUp 0.5s ease forwards',
   animationDelay: `${delay}ms`,
 })
 
 export default function VCard({ isDark, onToggle }) {
   const [qrOpen, setQrOpen] = useState(false)
+  const { total, loading } = useVisitas()
 
   return (
     <>
@@ -187,9 +189,28 @@ export default function VCard({ isDark, onToggle }) {
             </div>
           </div>
 
-          {/* SECCIÓN 6 — Botones */}
+          {/* SECCIÓN 6 — Contador de visitas */}
+          <div style={sectionStyle(550)}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              marginBottom: 16,
+              padding: '6px 12px',
+              borderRadius: 20,
+              background: isDark ? 'rgba(79,70,229,0.15)' : 'rgba(79,70,229,0.08)',
+              width: 'fit-content',
+            }}>
+              <EyeOutlined style={{ color: '#4f46e5', fontSize: 14 }} />
+              <Text style={{ fontSize: 12, color: '#4f46e5', fontWeight: 500 }}>
+                {loading ? '...' : `${total?.toLocaleString()} visitas`}
+              </Text>
+            </div>
+          </div>
+
+          {/* SECCIÓN 7 — Botones */}
           <div style={sectionStyle(600)}>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', marginTop: 16 }}>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between' }}>
               <Tooltip title="Guarda mi contacto en tu celular">
                 <Button
                   icon={<UserAddOutlined />}
@@ -229,7 +250,6 @@ export default function VCard({ isDark, onToggle }) {
   )
 }
 
-/* ── Header con gradiente Coderk + animación ── */
 function VCardHeader({ isDark, onToggle }) {
   return (
     <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
@@ -238,7 +258,6 @@ function VCardHeader({ isDark, onToggle }) {
         alt="Header"
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       />
-      {/* Gradiente dinámico indigo/violet — colores Coderk */}
       <div
         style={{
           position: 'absolute',
