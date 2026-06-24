@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-const TABLA = 'vcarderick_page_views'
+const TABLA = 'page_views'
 
 export function useVisitas() {
   const [total, setTotal] = useState(null)
